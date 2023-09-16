@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body{
+        background-image: url('background.jpg');
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        height: 100vh;
+
+    }
+
+    .elems{
+        /* border: 2px solid red;    */
+        width: 15vh;
+        height: 15vh;
+        border: 4px solid black;
+        color: white;
+        flex-direction: column;
+        display: flex;
+        justify-content: space-evenly;
+        align-items:center;
+        background: rgba(0, 0, 0, 0.4);
+        text-shadow: 0 0 .5rem black;
+        font-family: monospace;
+        transition: all 0.07s;
+    }
+
+    .elems>kbd{
+        font-size: 2.3rem;
+    }
+
+    span{
+        color: #ffc600;
+    }
+
+    .playing{
+        transform: scale(1.1);
+        border-color: #ffc600;
+        box-shadow: 0px 0px 12px #ffc600;
+    }
+
+</style>
+<body>
+    <div data-key="65" class="elems">
+        <kbd>A</kbd>
+        <span class="sound">CLAP</span>
+    </div>
+    <div data-key="83" class="elems">
+        <kbd>S</kbd>
+        <span class="sound">HIHNAT</span>
+    </div>
+    <div data-key="68" class="elems">
+        <kbd>D</kbd>
+        <span class="sound">KICK</span>
+    </div>
+    <div data-key="70" class="elems">
+        <kbd>F</kbd>
+        <span class="sound">OPENHAT</span>
+    </div>
+    <div data-key="71" class="elems">
+        <kbd>G</kbd>
+        <span class="sound">BOOM</span>
+    </div>
+    <div data-key="72" class="elems">
+        <kbd>H</kbd>
+        <span class="sound">RIDE</span>
+    </div>
+    <div data-key="74" class="elems">
+        <kbd>J</kbd>
+        <span class="sound">SNARE</span>
+    </div>
+    <div data-key="75" class="elems">
+        <kbd>K</kbd>
+        <span class="sound">TOM</span>
+    </div>
+    <div data-key="76" class="elems">
+        <kbd>L</kbd>
+        <span class="sound">TINK</span>
+    </div>
+
+
+    <audio data-key="65" src="sounds/clap.wav"></audio>
+    <audio data-key="83" src="sounds/hihat.wav"></audio>
+    <audio data-key="68" src="sounds/kick.wav"></audio>
+    <audio data-key="70" src="sounds/openhat.wav"></audio>
+    <audio data-key="71" src="sounds/boom.wav"></audio>
+    <audio data-key="72" src="sounds/ride.wav"></audio>
+    <audio data-key="74" src="sounds/snare.wav"></audio>
+    <audio data-key="75" src="sounds/tom.wav"></audio>
+    <audio data-key="76" src="sounds/tink.wav"></audio>
+
+
+    <script>
+
+        function playSound (e){
+            // console.log(e.keyCode)
+            let audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+            let key = document.querySelector(`.elems[data-key="${e.keyCode}"]`);
+            if(!audio) return;
+            audio.currentTime = 0; // rewind to the start
+            audio.play()
+            key.classList.add('playing')
+            // setTimeout will have a problem of sync with transition
+        }
+        
+        function removeClass(e){
+            if(e.propertyName !== 'transform') return;
+            this.classList.remove('playing') // this will act as keys as the addEventlistner is called against key  
+        }
+        
+        let keys = document.querySelectorAll('.elems')
+        keys.forEach(keys=>keys.addEventListener('transitionend', removeClass))
+        window.addEventListener('keydown', playSound)
+
+    </script>
+</body>
+</html>
